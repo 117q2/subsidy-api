@@ -1,0 +1,109 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "县级补贴标准查询",
+    "description": "查询河南省某县某年耕地地力保护补贴/稻谷生产者补贴的标准、政策出处与公示期。库中无该县条目时返回found=false，助手执行兜底句。",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://你的公网地址"
+    }
+  ],
+  "paths": {
+    "/query": {
+      "get": {
+        "operationId": "query_county_subsidy",
+        "summary": "县级补贴标准查询",
+        "description": "输入县名+补贴类型+年份，返回补贴标准、标准类型、政策出处、公示期。found=false表示未查到，助手须走兜底句。",
+        "parameters": [
+          {
+            "name": "county",
+            "in": "query",
+            "required": true,
+            "description": "县名，如\"延津县\"",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "description": "补贴类型，支持俗称：地力补贴/直补/小麦补贴/水稻/稻谷/农机",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "description": "年份，如\"2026\"",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查询结果",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "found": {
+                      "type": "boolean",
+                      "description": "是否命中；false时助手走兜底句"
+                    },
+                    "county": {
+                      "type": "string",
+                      "description": "县名"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "补贴类型标准名"
+                    },
+                    "year": {
+                      "type": "string",
+                      "description": "数据年份"
+                    },
+                    "standard": {
+                      "type": "string",
+                      "description": "补贴标准"
+                    },
+                    "standard_type": {
+                      "type": "string",
+                      "description": "具体金额 或 动态测算(总额均分)"
+                    },
+                    "policy_source": {
+                      "type": "string",
+                      "description": "政策出处"
+                    },
+                    "publicity_period": {
+                      "type": "string",
+                      "description": "公示期"
+                    },
+                    "year_matched": {
+                      "type": "string",
+                      "description": "年份回退时实际返回的数据年份"
+                    },
+                    "note": {
+                      "type": "string",
+                      "description": "年份回退提示，回答须说明数据年份"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "未命中说明"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
